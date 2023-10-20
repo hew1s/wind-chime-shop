@@ -1,0 +1,8 @@
+go 1.20
+
+use (
+	./shop_user_srv
+	./shop_product_srv
+	./shop_seckill_srv
+	./shop_web
+)

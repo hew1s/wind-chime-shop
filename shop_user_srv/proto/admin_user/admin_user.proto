@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package shop_user_srv;
+
+option go_package = "./proto/admin_user;admin_user";
+
+service AdminUser {
+  rpc AdminUserLogin(AdminUserRequest) returns (AdminUserResponse){}
+}
+
+message AdminUserRequest{
+  string username = 1;
+  string password = 2;
+}
+
+message AdminUserResponse {
+  int32 code =1;
+  string msg = 2;
+  string user_name = 3;
+}

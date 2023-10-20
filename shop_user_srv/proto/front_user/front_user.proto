@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package shop_user_srv;
+
+option go_package = "./proto/front_user;front_user";
+
+service FrontUser {
+  rpc FrontUserRegister(FrontUserRequest) returns (FrontUserResponse){}
+  rpc FrontUserSendEmail(FrontUserMailRequest) returns (FrontUserResponse){}
+  rpc FrontUserLogin(FrontUserRequest) returns (FrontUserResponse){}
+}
+
+message FrontUserRequest{
+  string email = 1;
+  string code = 2;
+  string password = 3;
+  string repassword = 4;
+}
+
+message FrontUserMailRequest {
+  string email = 1;
+}
+
+message FrontUserResponse {
+  int32 code =1;
+  string msg = 2;
+  string user_name = 3;
+}
