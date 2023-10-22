@@ -6,6 +6,28 @@ option go_package = "./proto/admin_user;admin_user";
 
 service AdminUser {
   rpc AdminUserLogin(AdminUserRequest) returns (AdminUserResponse){}
+  rpc FrontUserList(FrontUsersRequest) returns (FrontUsersResponse){}
+}
+
+message FrontUsersRequest{
+  int32 current_page = 1;
+  int32 page_size =2;
+}
+
+message FrontUsersResponse{
+  int32 code =1;
+  string msg = 2;
+  repeated FrontUserList front_users =3;
+  int32 total = 4;
+  int32 current = 5;
+  int32 pagesize =6;
+}
+
+message FrontUserList{
+  string email =1;
+  string desc =2;
+  string status =3;
+  string create_time=4;
 }
 
 message AdminUserRequest{

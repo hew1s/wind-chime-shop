@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package shop_product_srv;
+
+option go_package = "./proto/product;shop_product_srv";
+
+service Products {
+  rpc ProductList(ProductsRequest) returns (ProductsResponse) {}
+  rpc ProductAdd(ProductAddRequest) returns (ProductAddResponse){}
+  rpc ProductDel(ProductDelRequest) returns (ProductAddResponse){}
+}
+
+message ProductDelRequest{
+  int32 id = 1;
+}
+
+message ProductAddRequest{
+  string name = 1;
+  float price = 2;
+  int32 num = 3;
+  string create_time = 4;
+  string unit = 5;
+  string pic = 6;
+  string desc = 7;
+}
+
+message ProductAddResponse{
+  int32 code = 1;
+  string msg = 2;
+}
+
+message ProductsRequest {
+  int32 current_page = 1;
+  int32 page_size = 2;
+}
+
+message ProductsResponse{
+  int32 code = 1;
+  string msg = 2;
+  repeated Product products = 3;
+  int32 total = 4;
+  int32 current = 5;
+  int32 pagesize = 6;
+}
+
+message Product{
+  int32 id = 8;
+  string name = 1;
+  float price = 2;
+  int32 num = 3;
+  string create_time = 4;
+  string unit = 5;
+  string pic = 6;
+  string desc = 7;
+}

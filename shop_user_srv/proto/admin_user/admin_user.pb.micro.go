@@ -43,6 +43,7 @@ func NewAdminUserEndpoints() []*api.Endpoint {
 
 type AdminUserService interface {
 	AdminUserLogin(ctx context.Context, in *AdminUserRequest, opts ...client.CallOption) (*AdminUserResponse, error)
+	FrontUserList(ctx context.Context, in *FrontUsersRequest, opts ...client.CallOption) (*FrontUsersResponse, error)
 }
 
 type adminUserService struct {
@@ -67,15 +68,27 @@ func (c *adminUserService) AdminUserLogin(ctx context.Context, in *AdminUserRequ
 	return out, nil
 }
 
+func (c *adminUserService) FrontUserList(ctx context.Context, in *FrontUsersRequest, opts ...client.CallOption) (*FrontUsersResponse, error) {
+	req := c.c.NewRequest(c.name, "AdminUser.FrontUserList", in)
+	out := new(FrontUsersResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for AdminUser service
 
 type AdminUserHandler interface {
 	AdminUserLogin(context.Context, *AdminUserRequest, *AdminUserResponse) error
+	FrontUserList(context.Context, *FrontUsersRequest, *FrontUsersResponse) error
 }
 
 func RegisterAdminUserHandler(s server.Server, hdlr AdminUserHandler, opts ...server.HandlerOption) error {
 	type adminUser interface {
 		AdminUserLogin(ctx context.Context, in *AdminUserRequest, out *AdminUserResponse) error
+		FrontUserList(ctx context.Context, in *FrontUsersRequest, out *FrontUsersResponse) error
 	}
 	type AdminUser struct {
 		adminUser
@@ -90,4 +103,8 @@ type adminUserHandler struct {
 
 func (h *adminUserHandler) AdminUserLogin(ctx context.Context, in *AdminUserRequest, out *AdminUserResponse) error {
 	return h.AdminUserHandler.AdminUserLogin(ctx, in, out)
+}
+
+func (h *adminUserHandler) FrontUserList(ctx context.Context, in *FrontUsersRequest, out *FrontUsersResponse) error {
+	return h.AdminUserHandler.FrontUserList(ctx, in, out)
 }

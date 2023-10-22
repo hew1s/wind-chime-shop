@@ -12,7 +12,7 @@ api:
 
 .PHONY: proto
 proto:
-	protoc --proto_path=. --micro_out=. --go_out=:. proto/shop_product_srv.proto
+	protoc --proto_path=. --micro_out=. --go_out=:. proto/product/product.proto
 	
 .PHONY: build
 build:
