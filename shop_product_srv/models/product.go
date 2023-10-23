@@ -11,6 +11,7 @@ type Products struct {
 	Pic        string
 	Desc       string
 	CreateTime time.Time
+	SecKills   []SecKills `gorm:"ForeignKey:PId;AssiciationForeignKey:Id"`
 }
 
 func (Products) AdminUser() string {

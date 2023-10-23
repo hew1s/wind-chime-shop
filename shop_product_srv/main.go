@@ -6,7 +6,8 @@ import (
 	"github.com/asim/go-micro/v3/logger"
 	"shop_product_srv/controller"
 	_ "shop_product_srv/data_source"
-	"shop_product_srv/proto/product"
+	product "shop_product_srv/proto/product"
+	seckill "shop_product_srv/proto/seckill"
 )
 
 func main() {
@@ -18,7 +19,8 @@ func main() {
 		service.Registry(consulReg),
 	)
 
-	shop_product_srv.RegisterProductsHandler(srv.Server(), new(controller.Products))
+	product.RegisterProductsHandler(srv.Server(), new(controller.Products))
+	seckill.RegisterSecKillsHandler(srv.Server(), new(controller.SecKills))
 	// Run service
 	if err := srv.Run(); err != nil {
 		logger.Fatal(err)

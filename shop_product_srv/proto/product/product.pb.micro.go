@@ -45,6 +45,8 @@ type ProductsService interface {
 	ProductList(ctx context.Context, in *ProductsRequest, opts ...client.CallOption) (*ProductsResponse, error)
 	ProductAdd(ctx context.Context, in *ProductAddRequest, opts ...client.CallOption) (*ProductAddResponse, error)
 	ProductDel(ctx context.Context, in *ProductDelRequest, opts ...client.CallOption) (*ProductAddResponse, error)
+	GetProduct(ctx context.Context, in *ProductDelRequest, opts ...client.CallOption) (*GetProductResponse, error)
+	EditProduct(ctx context.Context, in *ProductEditRequest, opts ...client.CallOption) (*ProductAddResponse, error)
 }
 
 type productsService struct {
@@ -89,12 +91,34 @@ func (c *productsService) ProductDel(ctx context.Context, in *ProductDelRequest,
 	return out, nil
 }
 
+func (c *productsService) GetProduct(ctx context.Context, in *ProductDelRequest, opts ...client.CallOption) (*GetProductResponse, error) {
+	req := c.c.NewRequest(c.name, "Products.GetProduct", in)
+	out := new(GetProductResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productsService) EditProduct(ctx context.Context, in *ProductEditRequest, opts ...client.CallOption) (*ProductAddResponse, error) {
+	req := c.c.NewRequest(c.name, "Products.EditProduct", in)
+	out := new(ProductAddResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Products service
 
 type ProductsHandler interface {
 	ProductList(context.Context, *ProductsRequest, *ProductsResponse) error
 	ProductAdd(context.Context, *ProductAddRequest, *ProductAddResponse) error
 	ProductDel(context.Context, *ProductDelRequest, *ProductAddResponse) error
+	GetProduct(context.Context, *ProductDelRequest, *GetProductResponse) error
+	EditProduct(context.Context, *ProductEditRequest, *ProductAddResponse) error
 }
 
 func RegisterProductsHandler(s server.Server, hdlr ProductsHandler, opts ...server.HandlerOption) error {
@@ -102,6 +126,8 @@ func RegisterProductsHandler(s server.Server, hdlr ProductsHandler, opts ...serv
 		ProductList(ctx context.Context, in *ProductsRequest, out *ProductsResponse) error
 		ProductAdd(ctx context.Context, in *ProductAddRequest, out *ProductAddResponse) error
 		ProductDel(ctx context.Context, in *ProductDelRequest, out *ProductAddResponse) error
+		GetProduct(ctx context.Context, in *ProductDelRequest, out *GetProductResponse) error
+		EditProduct(ctx context.Context, in *ProductEditRequest, out *ProductAddResponse) error
 	}
 	type Products struct {
 		products
@@ -124,4 +150,12 @@ func (h *productsHandler) ProductAdd(ctx context.Context, in *ProductAddRequest,
 
 func (h *productsHandler) ProductDel(ctx context.Context, in *ProductDelRequest, out *ProductAddResponse) error {
 	return h.ProductsHandler.ProductDel(ctx, in, out)
+}
+
+func (h *productsHandler) GetProduct(ctx context.Context, in *ProductDelRequest, out *GetProductResponse) error {
+	return h.ProductsHandler.GetProduct(ctx, in, out)
+}
+
+func (h *productsHandler) EditProduct(ctx context.Context, in *ProductEditRequest, out *ProductAddResponse) error {
+	return h.ProductsHandler.EditProduct(ctx, in, out)
 }

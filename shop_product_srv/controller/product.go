@@ -93,3 +93,52 @@ func (p *Products) ProductDel(ctx context.Context, in *shop_product_srv.ProductD
 	out.Msg = "删除成功"
 	return nil
 }
+
+// 根据id获取商品信息
+func (p *Products) GetProduct(ctx context.Context, in *shop_product_srv.ProductDelRequest, out *shop_product_srv.GetProductResponse) error {
+	id := in.Id
+	var pro models.Products
+	result := data_source.Db.Where("id =?", id).First(&pro)
+	if result.Error != nil {
+		out.Code = 500
+		out.Msg = "未查询到该商品信息"
+		return result.Error
+	}
+	out.Code = 200
+	out.Msg = "success"
+	out.Id = int32(pro.Id)
+	out.Name = pro.Name
+	out.Price = pro.Price
+	out.Num = int32(pro.Num)
+	out.Unit = pro.Unit
+	out.Desc = pro.Desc
+	out.Pic = pro.Pic
+	return nil
+}
+
+// 编辑商品
+func (p *Products) EditProduct(ctx context.Context, in *shop_product_srv.ProductEditRequest, out *shop_product_srv.ProductAddResponse) error {
+	id := in.Id
+	name := in.Name
+	price := in.Price
+	num := in.Num
+	unit := in.Unit
+	desc := in.Desc
+	var pro models.Products
+	result := data_source.Db.Model(&pro).Omit("pic").Where("id =?", id).Updates(map[string]interface{}{
+		"name":  name,
+		"price": price,
+		"num":   num,
+		"unit":  unit,
+		"desc":  desc,
+		"pic":   "",
+	})
+	if result.Error != nil {
+		out.Code = 500
+		out.Msg = "更新失败"
+		return result.Error
+	}
+	out.Code = 200
+	out.Msg = "更新商品数据成功"
+	return nil
+}

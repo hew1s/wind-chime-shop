@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"shop_product_srv/proto/product"
+	"shop_web/utils"
 	"strconv"
 	"time"
 )
@@ -87,6 +88,88 @@ func ProductDel(c *gin.Context) {
 	RegisterProConsul()
 	rep, err := microProClient.ProductDel(context.TODO(), &shop_product_srv.ProductDelRequest{
 		Id: int32(pid),
+	})
+	if err != nil {
+		c.JSON(http.StatusOK, rep)
+		return
+	}
+	c.JSON(http.StatusOK, rep)
+}
+
+// 根据id获取商品信息
+func GetProductById(c *gin.Context) {
+	id := c.Query("id")
+	pid, _ := strconv.ParseInt(id, 10, 32)
+	var product struct {
+		ID    int     `json:"id"`
+		Name  string  `json:"name"`
+		Price float32 `json:"price"`
+		Num   int     `json:"num"`
+		Uint  string  `json:"unit"`
+		Desc  string  `json:"desc"`
+	}
+	RegisterProConsul()
+	rep, err := microProClient.GetProduct(context.TODO(), &shop_product_srv.ProductDelRequest{
+		Id: int32(pid),
+	})
+	if err != nil {
+		c.JSON(http.StatusOK, rep)
+		return
+	}
+	product.ID = int(rep.Id)
+	product.Name = rep.Name
+	product.Price = rep.Price
+	product.Num = int(rep.Num)
+	product.Uint = rep.Unit
+	product.Desc = rep.Desc
+	c.JSON(http.StatusOK, gin.H{
+		"code":       rep.Code,
+		"msg":        rep.Msg,
+		"product":    product,
+		"img_base64": utils.ImgToBase64(rep.Pic),
+	})
+}
+
+// 编辑商品
+func EditProduct(c *gin.Context) {
+	id := c.PostForm("id")
+	pid, _ := strconv.ParseInt(id, 10, 32)
+	name := c.PostForm("name")
+	price := c.PostForm("price")
+	price_float, _ := strconv.ParseFloat(price, 32)
+	num := c.PostForm("num")
+	num_int, _ := strconv.ParseInt(num, 10, 32)
+	unit := c.PostForm("unit")
+	desc := c.PostForm("desc")
+	file, err := c.FormFile("pic")
+	if err != nil {
+		RegisterProConsul()
+		rep, err := microProClient.EditProduct(context.TODO(), &shop_product_srv.ProductEditRequest{
+			Name:  name,
+			Price: float32(price_float),
+			Num:   int32(num_int),
+			Id:    int32(pid),
+			Unit:  unit,
+			Desc:  desc,
+		})
+		if err != nil {
+			c.JSON(http.StatusOK, rep)
+			return
+		}
+		c.JSON(http.StatusOK, rep)
+		return
+	}
+	unix_str := strconv.FormatInt(time.Now().Unix(), 10)
+	file_path := "upload/" + unix_str + file.Filename
+	RegisterProConsul()
+	c.SaveUploadedFile(file, file_path)
+	rep, err := microProClient.ProductAdd(context.TODO(), &shop_product_srv.ProductAddRequest{
+		Name:  name,
+		Price: float32(price_float),
+		Num:   int32(num_int),
+		Unit:  unit,
+		Desc:  desc,
+		Pic:   file_path,
 	})
 	if err != nil {
 		c.JSON(http.StatusOK, rep)

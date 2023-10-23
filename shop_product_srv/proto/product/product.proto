@@ -8,10 +8,35 @@ service Products {
   rpc ProductList(ProductsRequest) returns (ProductsResponse) {}
   rpc ProductAdd(ProductAddRequest) returns (ProductAddResponse){}
   rpc ProductDel(ProductDelRequest) returns (ProductAddResponse){}
+  rpc GetProduct(ProductDelRequest) returns (GetProductResponse){}
+  rpc EditProduct(ProductEditRequest) returns (ProductAddResponse){}
+}
+
+message ProductEditRequest{
+  string name = 1;
+  float price = 2;
+  int32 num = 3;
+  int32 id = 4;
+  string unit = 5;
+  string pic = 6;
+  string desc = 7;
 }
 
 message ProductDelRequest{
   int32 id = 1;
+}
+
+message GetProductResponse{
+  int32 code = 1;
+  string msg = 2;
+  int32 id = 3;
+  string name = 4;
+  float price = 5;
+  int32 num = 6;
+  string unit = 7;
+  string pic = 8;
+  string desc = 9;
+
 }
 
 message ProductAddRequest{

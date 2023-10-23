@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package shop_product_srv;
+
+option go_package = "./proto/seckill;shop_product_srv";
+
+service SecKills {
+  rpc SecKillList(SecKillsRequest) returns (SecKillsResponse) {}
+  rpc SecKillAdd(AddSecKillRequest) returns (AddSecKillResponse) {}
+  rpc SecKillDel(DelSecKillRequest) returns (AddSecKillResponse){}
+  rpc SecKillById(DelSecKillRequest) returns (SecKillEditData){}
+  rpc SecKillEdit(SecKillEditRequest)returns (AddSecKillResponse){}
+}
+
+message DelSecKillRequest{
+  int32 id = 1;
+}
+
+message SecKillsRequest {
+  int32 current_page = 1;
+  int32 page_size = 2;
+}
+
+message SecKillsResponse{
+  int32 code = 1;
+  string msg = 2;
+  repeated SecKill seckills = 3;
+  int32 total = 4;
+  int32 current = 5;
+  int32 pagesize = 6;
+}
+
+message SecKill {
+  int32 id = 1;
+  string name = 2;
+  float price = 3;
+  int32 num = 4;
+  int32 pid = 5;
+  string start_time = 6;
+  string end_time = 7;
+  string create_time = 8;
+  string pname = 9;
+}
+
+message AddSecKillRequest{
+  int32 id = 1;
+  string name = 2;
+  float price = 3;
+  int32 num = 4;
+  int32 pid = 5;
+  string start_time = 6;
+  string end_time = 7;
+  string create_time = 8;
+  string pname = 9;
+}
+
+message AddSecKillResponse{
+  int32 code = 1;
+  string msg = 2;
+}
+
+message SecKillEditData{
+  int32 id = 1;
+  string name = 2;
+  float price = 3;
+  int32 num = 4;
+  int32 pid = 5;
+  string pname = 6;
+  repeated Productno prono = 7;
+  string start_time = 8;
+  string end_time = 9;
+  int32 code =10;
+  string msg=11;
+}
+
+message Productno{
+  int32 id = 1;
+  string name = 2;
+}
+
+message SecKillEditRequest{
+  int32 id = 1;
+  string name = 2;
+  float price = 3;
+  int32 num = 4;
+  int32 pid = 5;
+  string start_time = 6;
+  string end_time = 7;
+}
