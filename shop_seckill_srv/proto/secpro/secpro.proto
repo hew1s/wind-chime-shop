@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package shop_seckill_srv;
+
+option go_package = "./proto/secpro;shop_seckill_srv";
+
+service SecKill {
+  rpc FrontSecKill(SecKillRequest) returns (SecKillResponse) {}
+
+}
+
+message SecKillRequest{
+  int32 id=1;
+}
+
+message SecKillResponse{
+  int32 code = 1;
+  string msg = 2;
+}

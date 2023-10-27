@@ -12,7 +12,7 @@ api:
 
 .PHONY: proto
 proto:
-	protoc --proto_path=. --micro_out=. --go_out=:. proto/shop_seckill_srv.proto
+	protoc --proto_path=. --micro_out=. --go_out=:. proto/secpro/secpro.proto
 	
 .PHONY: build
 build:

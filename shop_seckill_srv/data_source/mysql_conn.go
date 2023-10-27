@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"shop_product_srv/models"
 )
 
 var Db *gorm.DB
@@ -34,6 +33,4 @@ func init() {
 
 	Db.DB().SetMaxOpenConns(100) // 最大连接数
 	Db.DB().SetMaxIdleConns(50)  // 最大空闲数
-
-	Db.AutoMigrate(&models.Products{})
 }

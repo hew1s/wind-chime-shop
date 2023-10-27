@@ -208,3 +208,14 @@ func (a *AdminUser) AdminUserLogin(ctx context.Context, in *admin_user.AdminUser
 }
 ```
 
+## 用户列表、商品、活动 列表 删除与修改
+
+用户列表、信息展示以及用户状态的启停
+
+### 商品：
+
+商品信息添加、展示、删除、编辑
+
+### 活动：
+
+活动关联商品id，活动信息添加、展示、删除、编辑

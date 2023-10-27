@@ -4,8 +4,9 @@ import (
 	"github.com/asim/go-micro/plugins/registry/consul/v3"
 	service "github.com/asim/go-micro/v3"
 	"github.com/asim/go-micro/v3/logger"
-	"shop_seckill_srv/handler"
-	pb "shop_seckill_srv/proto"
+	"shop_seckill_srv/controller"
+	_ "shop_seckill_srv/data_source"
+	"shop_seckill_srv/proto/secpro"
 )
 
 func main() {
@@ -16,10 +17,7 @@ func main() {
 		service.Address("127.0.0.1:6003"),
 		service.Registry(consulReg),
 	)
-
-	// Register handler
-	pb.RegisterShop_seckill_srvHandler(srv.Server(), handler.New())
-
+	shop_seckill_srv.RegisterSecKillHandler(srv.Server(), new(controller.SecKill))
 	// Run service
 	if err := srv.Run(); err != nil {
 		logger.Fatal(err)

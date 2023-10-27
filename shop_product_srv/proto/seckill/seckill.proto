@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package shop_product_srv;
 
-option go_package = "./proto/seckill;shop_product_srv";
+option go_package = "./proto/seckillpro;shop_product_srv";
 
 service SecKills {
   rpc SecKillList(SecKillsRequest) returns (SecKillsResponse) {}
@@ -10,7 +10,32 @@ service SecKills {
   rpc SecKillDel(DelSecKillRequest) returns (AddSecKillResponse){}
   rpc SecKillById(DelSecKillRequest) returns (SecKillEditData){}
   rpc SecKillEdit(SecKillEditRequest)returns (AddSecKillResponse){}
+
+
+  rpc FrontSecKills (FrontSecKillRequest) returns (FrontSecKillResponse){}
+  rpc FrontSeckillDetail(DelSecKillRequest) returns (FrontSeckillDetailResponse){}
 }
+
+message FrontSeckillDetailResponse{
+  int32 code = 1;
+  string msg = 2;
+  SecKill seckilldetail =3;
+}
+
+message FrontSecKillRequest{
+  int32 current_page = 1;
+  int32 page_size = 2;
+}
+
+message FrontSecKillResponse{
+  int32 code = 1;
+  string msg = 2;
+  repeated SecKill seckill_list = 3;
+  int32 totalpage = 4;
+  int32 currentpage = 5;
+  int32 pagesize = 6;
+}
+
 
 message DelSecKillRequest{
   int32 id = 1;
@@ -40,6 +65,10 @@ message SecKill {
   string end_time = 7;
   string create_time = 8;
   string pname = 9;
+  string pic =10;
+  float pprice =11;
+  string pdesc=12;
+  string unit =13;
 }
 
 message AddSecKillRequest{
@@ -69,8 +98,8 @@ message SecKillEditData{
   repeated Productno prono = 7;
   string start_time = 8;
   string end_time = 9;
-  int32 code =10;
-  string msg=11;
+  int32 code = 10;
+  string msg = 11;
 }
 
 message Productno{
